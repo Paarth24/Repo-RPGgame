@@ -13,22 +13,21 @@ int main() {
     //creating a SFML window
     sf::RenderWindow window(sf::VideoMode(800, 600), "RPG Game", sf::Style::Default, settings);
 
-    //creating circle
-    sf::CircleShape circle(50.f);
-    circle.setFillColor(sf::Color::Red);
-    circle.setPosition(sf::Vector2f(100, 100));
-    circle.setOutlineThickness(10.0f);
-    circle.setOutlineColor(sf::Color::Magenta);
-
-    //creating rectangle
-    sf::RectangleShape rectangle(sf::Vector2f(100, 70));
-    rectangle.setFillColor(sf::Color::Magenta);
-    rectangle.setOutlineThickness(8.f);
-    rectangle.setOutlineColor(sf::Color::Cyan);
-    rectangle.setPosition(sf::Vector2f(200, 100));
-    rectangle.setOrigin(rectangle.getSize() / 2.f);
-    rectangle.setRotation(45.f); 
     //-------------------------Initialize-------------------
+    
+    //-------------------------Load-------------------
+     
+    sf::Texture playerTexture;
+    sf::Sprite playerSprite;
+
+    playerTexture.loadFromFile("assets/player/textures/spriteSheet.png");
+    playerSprite.setTexture(playerTexture);
+    playerSprite.scale(sf::Vector2f(3, 3));
+
+    int XIndex = 0;
+    int YIndex = 0;
+    playerSprite.setTextureRect(sf::IntRect(XIndex * 64, YIndex * 64, 64, 64));
+    //-------------------------Load-------------------
     
     //creating a game loop
     while (window.isOpen()) {
@@ -40,18 +39,36 @@ int main() {
         while (window.pollEvent(event)) {
 
             if (event.type == sf::Event::Closed) {
+
                 window.close();
             }
         }
-        //-------------------------Update-------------------
         
+        sf::Vector2f position = playerSprite.getPosition();
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+
+            playerSprite.setPosition(position + sf::Vector2f(1, 0));
+        }
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
+
+            playerSprite.setPosition(position + sf::Vector2f(-1, 0));
+        }
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
+
+            playerSprite.setPosition(position + sf::Vector2f(0, -1));
+        }
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+
+            playerSprite.setPosition(position + sf::Vector2f(0, 1));
+        }
+        //-------------------------Update-------------------
 
         //-------------------------Draw-------------------
         window.clear(sf::Color::Black);
-
-        window.draw(circle);
-        window.draw(rectangle);
-
+        window.draw(playerSprite);
         window.display();
         //-------------------------Draw-------------------
     }
